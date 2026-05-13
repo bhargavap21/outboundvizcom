@@ -20,15 +20,15 @@ APIFY_API_KEY = os.environ.get("APIFY_API_KEY", "")
 APIFY_ACTOR_LINKEDIN_JOBS = os.environ.get(
     "APIFY_ACTOR_LINKEDIN_JOBS", "bebity/linkedin-jobs-scraper"
 )
+# One run per company URL (not batched) — actor accepts a single linkedin_url per call
 APIFY_ACTOR_LINKEDIN_POSTS = os.environ.get(
-    "APIFY_ACTOR_LINKEDIN_POSTS", "apimaestro/linkedin-company-posts-scraper"
+    "APIFY_ACTOR_LINKEDIN_POSTS", "data-slayer/linkedin-company-posts-scraper"
 )
+# Query-based people search; use "{name} industrial design" for best match
 APIFY_ACTOR_BEHANCE = os.environ.get(
-    "APIFY_ACTOR_BEHANCE", "apify/behance-scraper"
+    "APIFY_ACTOR_BEHANCE", "easyapi/behance-people-scraper"
 )
-APIFY_ACTOR_ARTSTATION = os.environ.get(
-    "APIFY_ACTOR_ARTSTATION", "apify/artstation-scraper"
-)
+# ArtStation: no reliable Apify actors available as of 2026-05; disabled
 
 # Max results per agency per Apify run (controls cost)
 APIFY_JOBS_MAX_RESULTS = int(os.environ.get("APIFY_JOBS_MAX_RESULTS", "25"))

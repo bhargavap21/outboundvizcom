@@ -91,63 +91,59 @@ def fetch_job_postings(seed_agencies: List[str]) -> List[RawSignal]:
 def fetch_company_posts(seed_agencies: List[str]) -> List[RawSignal]:
     """
     Pull recent company feed posts (case studies, client wins, announcements).
-    Actor: apimaestro/linkedin-company-posts-scraper
-    (verify at https://apify.com/apimaestro/linkedin-company-posts-scraper)
+    Actor: data-slayer/linkedin-company-posts-scraper
+    (https://apify.com/data-slayer/linkedin-company-posts-scraper)
 
-    Expected actor input:
-      companyUrls  — LinkedIn company page URLs
-      maxPosts     — cap per company
+    Input schema: { linkedin_url: str, maxPosts: int }
+    Actor accepts ONE company URL per run — we loop over agencies individually.
+    Real LinkedIn URLs should be stored in agency_list; slugs are a fallback.
+
+    Output keys: url, text, created_at, author{name, public_identifier, url}
     """
     signals: List[RawSignal] = []
 
-    # Actor expects LinkedIn company URLs; we build best-guess slugs from names.
-    # Real LinkedIn URLs should be stored in the agency_list table and passed in.
     company_entries = [
         {"name": name, "url": _linkedin_company_url(name)}
         for name in seed_agencies
     ]
 
-    run_input = {
-        "companyUrls": [e["url"] for e in company_entries],
-        "maxPosts": APIFY_POSTS_MAX_RESULTS,
-        "proxy": {"useApifyProxy": True},
-    }
+    for entry in company_entries:
+        run_input = {
+            "linkedin_url": entry["url"],
+            "maxPosts": APIFY_POSTS_MAX_RESULTS,
+        }
 
-    try:
-        items = run_actor(APIFY_ACTOR_LINKEDIN_POSTS, run_input)
-    except Exception as e:
-        log.error("linkedin_posts_actor_failed", error=str(e))
-        return signals
-
-    for item in items:
-        company_url = item.get("companyUrl") or item.get("authorUrl") or ""
-        agency_name = _match_agency_by_url(company_url, company_entries)
-        if not agency_name:
-            # Fall back to text matching against company name field
-            company = item.get("companyName") or item.get("authorName") or ""
-            agency_name = _match_agency(company, seed_agencies)
-        if not agency_name:
+        try:
+            items = run_actor(APIFY_ACTOR_LINKEDIN_POSTS, run_input)
+        except Exception as e:
+            log.error("linkedin_posts_actor_failed", agency=entry["name"], error=str(e))
             continue
 
-        raw_text = item.get("text") or item.get("content") or item.get("description") or ""
-        if not raw_text.strip():
-            continue
+        for item in items:
+            raw_text = item.get("text") or item.get("content") or item.get("description") or ""
+            if not raw_text.strip():
+                continue
 
-        url = item.get("postUrl") or item.get("url") or ""
-        posted_at = _parse_date(item.get("postedAt") or item.get("publishedAt"))
-        signal_type = classify_signal_type(raw_text, source="linkedin_post")
+            # Confirm the post belongs to this company via the author field
+            author = item.get("author") or {}
+            author_name = author.get("name", "") if isinstance(author, dict) else ""
+            agency_name = _match_agency(author_name, seed_agencies) or entry["name"]
 
-        signals.append(RawSignal(
-            agency_name=agency_name,
-            source="linkedin_post",
-            signal_type=signal_type,
-            vertical_hint=extract_vertical_hint(raw_text),
-            url=url,
-            raw_text=raw_text,
-            timestamp=posted_at,
-        ))
+            url = item.get("url") or item.get("postUrl") or ""
+            posted_at = _parse_date(item.get("created_at") or item.get("postedAt"))
+            signal_type = classify_signal_type(raw_text, source="linkedin_post")
 
-    log.info("linkedin_posts_fetched", total_items=len(items), signals=len(signals))
+            signals.append(RawSignal(
+                agency_name=agency_name,
+                source="linkedin_post",
+                signal_type=signal_type,
+                vertical_hint=extract_vertical_hint(raw_text),
+                url=url,
+                raw_text=raw_text,
+                timestamp=posted_at,
+            ))
+
+    log.info("linkedin_posts_fetched", agencies=len(company_entries), signals=len(signals))
     return signals
 
 
