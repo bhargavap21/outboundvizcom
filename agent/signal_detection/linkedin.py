@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import List
 import structlog
 
-from agent.signal_detection.apify_client import run_actor
+from agent.signal_detection.apify_client import run_actor, PermanentActorError
 from agent.signal_detection.classifier import classify_signal_type, extract_vertical_hint
 from config.settings import (
     APIFY_ACTOR_LINKEDIN_JOBS,
@@ -56,6 +56,9 @@ def fetch_job_postings(seed_agencies: List[str]) -> List[RawSignal]:
 
     try:
         items = run_actor(APIFY_ACTOR_LINKEDIN_JOBS, run_input)
+    except PermanentActorError as e:
+        log.warning("linkedin_jobs_actor_unavailable", error=str(e))
+        return signals
     except Exception as e:
         log.error("linkedin_jobs_actor_failed", error=str(e))
         return signals
@@ -115,6 +118,10 @@ def fetch_company_posts(seed_agencies: List[str]) -> List[RawSignal]:
 
         try:
             items = run_actor(APIFY_ACTOR_LINKEDIN_POSTS, run_input)
+        except PermanentActorError as e:
+            # Common cause: company has no posts — actor pushes null and crashes internally
+            log.warning("linkedin_posts_no_data", agency=entry["name"], error=str(e))
+            continue
         except Exception as e:
             log.error("linkedin_posts_actor_failed", agency=entry["name"], error=str(e))
             continue
