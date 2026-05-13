@@ -86,7 +86,12 @@ def main() -> None:
     thin = "─" * 65
 
     print(f"\n{sep}")
-    print("  COLD EMAIL")
+    print("  DAY 1 — BEHANCE/ARTSTATION COMMENT")
+    print(sep)
+    print(pkg.behance_comment)
+
+    print(f"\n{sep}")
+    print("  DAY 3 — COLD EMAIL  ({} words)".format(len(pkg.cold_email_body.split())))
     print(sep)
     print(f"Subject A : {pkg.cold_email_subject_a}")
     print(f"Subject B : {pkg.cold_email_subject_b}")
@@ -94,16 +99,20 @@ def main() -> None:
     print(pkg.cold_email_body)
 
     print(f"\n{sep}")
-    print("  LINKEDIN CONNECTION NOTE  ({} chars)".format(len(pkg.linkedin_connection_note)))
+    print("  DAY 7 — LINKEDIN CONNECTION NOTE  ({} chars)".format(len(pkg.linkedin_connection_note)))
     print(sep)
     print(pkg.linkedin_connection_note)
 
     print(f"\n{sep}")
-    print("  LINKEDIN DM SEQUENCE")
+    print("  DAY 14 — LINKEDIN DM")
     print(sep)
-    print(f"[Day 3]\n{pkg.linkedin_dm_day3}\n")
-    print(f"[Day 7]\n{pkg.linkedin_dm_day7}\n")
-    print(f"[Day 14]\n{pkg.linkedin_dm_day14}\n")
+    print(pkg.linkedin_dm_day14)
+
+    print(f"\n{sep}")
+    print("  DAY 30 — FINAL EMAIL")
+    print(sep)
+    print(pkg.final_email_day30)
+    print()
 
 
 if __name__ == "__main__":
