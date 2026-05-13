@@ -1,0 +1,15 @@
+Write a 3-message LinkedIn DM sequence for a design director at {agency_name}, a {vertical} studio.
+
+Message 1 (Day 3 after connecting): Share a relevant insight or render comparison for their vertical. No ask.
+Message 2 (Day 7): Reference a specific Vizcom customer in their vertical with a one-line result.
+Message 3 (Day 14): Soft ask — "Would a 20-min workflow session be useful?" with placeholder for calendar link.
+
+Tone: peer-to-peer, not salesy. Keep each message under 100 words.
+
+Format:
+MSG1:
+<message>
+MSG2:
+<message>
+MSG3:
+<message>

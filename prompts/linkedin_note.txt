@@ -1,0 +1,4 @@
+Write a LinkedIn connection request note (max 280 characters) to a designer at {agency_name}.
+Reference their most recent project: {recent_project_summary}.
+Tone: curious designer peer, not a vendor. Do not pitch anything. Just connect.
+Output only the note text, nothing else.

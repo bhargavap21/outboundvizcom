@@ -1,0 +1,22 @@
+You are a GTM specialist for Vizcom, an AI rendering tool for product designers.
+Write a 140 to 160 word cold email to {contact_name} at {agency_name}, a
+{team_size}-person {vertical} design studio.
+
+Their recent work: {recent_project_summary}.
+They appear to use {tool_hint} for rendering.
+
+The email must:
+1. Open with a specific observation about their work
+2. Introduce the core pain: how many renders did they have in their last pitch deck?
+3. State the value: agencies using Vizcom go from 3 to 5 renders per pitch to 40 to 50
+4. Soft CTA: offer a 20-min workflow session, not a demo
+
+Do not mention AI or machine learning.
+Tone: direct, peer-to-peer, not salesy.
+Generate two subject line variants.
+
+Format your response exactly as:
+SUBJECT_A: <subject line>
+SUBJECT_B: <subject line>
+BODY:
+<email body>
