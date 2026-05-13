@@ -22,20 +22,19 @@ def run_signal_detection(seed_agencies: List[str]) -> List[Signal]:
     raw: List[RawSignal] = []
 
     collectors = [
-        ("linkedin_jobs", fetch_job_postings),
-        ("linkedin_posts", fetch_company_posts),
-        ("behance", fetch_behance_projects),
-        ("artstation", fetch_artstation_projects),
-        ("trade_press", fetch_rss_signals),
+        ("linkedin_jobs",   lambda: fetch_job_postings(seed_agencies)),
+        ("linkedin_posts",  lambda: fetch_company_posts(seed_agencies)),
+        ("behance",         lambda: fetch_behance_projects(seed_agencies)),
+        ("artstation",      lambda: fetch_artstation_projects(seed_agencies)),
+        ("rss",             lambda: fetch_rss_signals(seed_agencies)),
+        ("google_news",     lambda: fetch_google_news(seed_agencies)),
     ]
 
     for name, fn in collectors:
         try:
-            results = fn(seed_agencies)
+            results = fn()
             raw.extend(results)
             log.info("signal_source_complete", source=name, count=len(results))
-        except NotImplementedError:
-            log.warning("signal_source_not_implemented", source=name)
         except Exception as exc:
             log.error("signal_source_error", source=name, error=str(exc))
 
@@ -45,15 +44,16 @@ def run_signal_detection(seed_agencies: List[str]) -> List[Signal]:
 def _persist_signals(signals: List[RawSignal]) -> List[Signal]:
     session = get_session()
     cutoff = datetime.utcnow() - timedelta(days=DEDUP_WINDOW_DAYS)
-    saved = []
+    saved: List[Signal] = []
 
     with session:
         existing_urls = {
-            row[0] for row in session.query(Signal.url).filter(Signal.detected_at >= cutoff).all()
+            row[0]
+            for row in session.query(Signal.url).filter(Signal.detected_at >= cutoff).all()
         }
 
         for s in signals:
-            if s.url in existing_urls:
+            if not s.url or s.url in existing_urls:
                 continue
             record = Signal(
                 agency_name=s.agency_name,
