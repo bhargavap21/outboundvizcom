@@ -11,6 +11,7 @@ from agent.signal_detection.runner import run_signal_detection
 from agent.scoring.pipeline import run_scoring_pipeline
 from agent.research.researcher import research_agency
 from agent.content.generator import generate_content
+from agent.distribution.sequence_dispatcher import run_sequence_dispatcher
 from agent.learning_loop.analyzer import run_weekly_analysis
 
 log = structlog.get_logger()
@@ -49,12 +50,32 @@ def pipeline_daily() -> None:
                     website=lead.website or "",
                     linkedin_url=lead.linkedin_url or "",
                 )
-                content = generate_content(brief)
+                # Enrich lead with research data
+                lead.contact_name = lead.contact_name or brief.contact_name
+                lead.contact_linkedin = lead.contact_linkedin or brief.contact_linkedin
+                lead.tool_stack = brief.tool_stack or lead.tool_stack
+                lead.trigger_summary = brief.trigger_summary
+
+                pkg = generate_content(brief)
+                # Persist content package as JSON so dispatcher can send later
+                lead.agency_brief = {
+                    "cold_email_subject_a":    pkg.cold_email_subject_a,
+                    "cold_email_subject_b":    pkg.cold_email_subject_b,
+                    "cold_email_body":         pkg.cold_email_body,
+                    "behance_comment":         pkg.behance_comment,
+                    "linkedin_connection_note": pkg.linkedin_connection_note,
+                    "linkedin_dm_day14":       pkg.linkedin_dm_day14,
+                    "final_email_day30":       pkg.final_email_day30,
+                }
                 lead.status = LeadStatus.content_ready
                 log.info("content_generated", agency=lead.agency_name)
             except Exception as e:
                 log.error("pipeline_error", agency=lead.agency_name, error=str(e))
         session.commit()
+
+    # Step 5: advance in-sequence leads through channel schedule
+    dispatcher_counts = run_sequence_dispatcher()
+    log.info("distribution_complete", **dispatcher_counts)
 
     log.info("daily_pipeline_complete")
 
