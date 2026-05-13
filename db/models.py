@@ -114,8 +114,10 @@ class AgencyList(Base):
     name = Column(String, nullable=False)
     website = Column(String)
     linkedin_url = Column(String)
+    linkedin_slug = Column(String)   # /company/<slug>/ portion
     country = Column(String)
     verticals = Column(JSON)
+    team_size_estimate = Column(Integer)
     is_existing_customer = Column(Boolean, default=False)
     source = Column(String)   # idsa, dexigner, designrush, manual
     added_at = Column(DateTime, default=datetime.utcnow)

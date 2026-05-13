@@ -4,11 +4,11 @@ import structlog
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from config.settings import SIGNAL_DETECTION_HOUR, SCORE_PROCEED, SCORE_WATCHLIST
+from config.settings import SIGNAL_DETECTION_HOUR
 from db import init_db, get_session
-from db.models import Signal, Lead, LeadStatus
+from db.models import Lead, LeadStatus
 from agent.signal_detection.runner import run_signal_detection
-from agent.scoring.scorer import score_lead, ScoringInput
+from agent.scoring.pipeline import run_scoring_pipeline
 from agent.research.researcher import research_agency
 from agent.content.generator import generate_content
 from agent.learning_loop.analyzer import run_weekly_analysis
@@ -25,43 +25,17 @@ def pipeline_daily() -> None:
     new_signals = run_signal_detection(SEED_AGENCIES)
     log.info("signals_detected", count=len(new_signals))
 
-    # Step 2: Score each signal
+    # Step 2: Classify → enrich → score → persist leads
+    scoring_output = run_scoring_pipeline(new_signals)
+    log.info(
+        "scoring_complete",
+        proceed=len(scoring_output.proceed),
+        watchlist=len(scoring_output.watchlist),
+        discarded=len(scoring_output.discarded),
+    )
+
+    # Step 3 + 4: Deep research and content generation for qualifying leads
     session = get_session()
-    with session:
-        for signal in new_signals:
-            inp = ScoringInput(
-                agency_name=signal.agency_name,
-                vertical=signal.vertical_hint or "",
-                team_size=None,       # enriched in research step
-                tool_stack=[],        # enriched in research step
-                signal_type=signal.signal_type,
-                signal_detected_at=signal.detected_at,
-            )
-            result = score_lead(inp)
-            log.info("lead_scored", agency=result.agency_name, score=result.total)
-
-            if result.total >= SCORE_PROCEED:
-                status = LeadStatus.researching
-            elif result.total >= SCORE_WATCHLIST:
-                status = LeadStatus.watchlist
-            else:
-                log.info("lead_discarded", agency=result.agency_name, score=result.total)
-                signal.processed = True
-                session.commit()
-                continue
-
-            lead = Lead(
-                agency_name=signal.agency_name,
-                vertical=signal.vertical_hint,
-                score=result.total,
-                status=status,
-                trigger_signal_id=signal.id,
-            )
-            session.add(lead)
-            signal.processed = True
-        session.commit()
-
-    # Step 3 + 4: Research and content generation for qualifying leads
     with session:
         qualifying = (
             session.query(Lead)

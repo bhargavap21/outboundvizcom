@@ -19,6 +19,7 @@ from db import init_db, get_session
 from db.models import Signal, Lead, LeadStatus
 from agent.signal_detection.runner import run_signal_detection
 from agent.scoring.scorer import score_lead, ScoringInput
+from agent.scoring.pipeline import run_scoring_pipeline
 from config.settings import SCORE_PROCEED, SCORE_WATCHLIST
 
 console = Console()
@@ -104,20 +105,30 @@ def print_report(scored: list[dict]):
     console.rule("[bold cyan]Step 3 — Lead Report[/bold cyan]")
 
     table = Table(box=box.ROUNDED, show_lines=True)
-    table.add_column("Agency",   style="bold", max_width=20)
-    table.add_column("Source",   max_width=14)
-    table.add_column("Type",     max_width=16)
-    table.add_column("Vertical", max_width=18)
-    table.add_column("Score",    justify="right", max_width=6)
-    table.add_column("Bucket",   max_width=12)
+    table.add_column("Agency",    style="bold", max_width=20)
+    table.add_column("Source",    max_width=14)
+    table.add_column("Vertical",  max_width=18)
+    table.add_column("Tools",     max_width=14)
+    table.add_column("Size",      justify="right", max_width=6)
+    table.add_column("Score",     justify="right", max_width=6)
+    table.add_column("Breakdown", max_width=30)
+    table.add_column("Bucket",    max_width=12)
 
     for r in scored:
+        bd = r.get("breakdown", {})
+        breakdown_str = (
+            f"v={bd.get('vertical',0)} s={bd.get('size',0)} "
+            f"t={bd.get('tool',0)} r={bd.get('recency',0)} str={bd.get('strength',0)}"
+            if bd else ""
+        )
         table.add_row(
             r["agency"],
             r["source"],
-            r["type"],
             r["vertical"],
+            r.get("tools", "—"),
+            str(r.get("team_size") or "?"),
             str(r["score"]),
+            breakdown_str,
             r["bucket"],
         )
 
@@ -150,42 +161,52 @@ def save_json(scored: list[dict]):
 
 
 def score_existing_db() -> list[dict]:
-    """Score all signals already in the DB (skips re-running Apify)."""
-    console.rule("[bold cyan]Step 2 — Scoring existing signals[/bold cyan]")
+    """
+    Run full scoring pipeline (Haiku classify + enrich + score) on all
+    unprocessed signals in DB. Creates/updates Lead records.
+    """
+    console.rule("[bold cyan]Step 2 — Full scoring pipeline (Haiku + enrichment)[/bold cyan]")
     session = get_session()
-    signals = session.query(Signal).all()
-    console.print(f"Scoring {len(signals)} signals from DB...\n")
+    signals = session.query(Signal).filter(Signal.processed == False).all()  # noqa: E712
     session.close()
 
+    if not signals:
+        console.print("[yellow]No unprocessed signals in DB. Re-scoring all signals...[/yellow]")
+        session = get_session()
+        signals = session.query(Signal).all()
+        session.close()
+
+    console.print(f"Running pipeline on {len(signals)} signals...\n")
+    output = run_scoring_pipeline(signals)
+
     scored = []
-    for signal in signals:
-        inp = ScoringInput(
-            agency_name=signal.agency_name,
-            vertical=signal.vertical_hint or "",
-            team_size=None,
-            tool_stack=[],
-            signal_type=signal.signal_type,
-            signal_detected_at=signal.detected_at,
-        )
-        result = score_lead(inp)
 
-        if result.total >= SCORE_PROCEED:
-            bucket = "[bold green]PROCEED[/bold green]"
-        elif result.total >= SCORE_WATCHLIST:
-            bucket = "[yellow]WATCHLIST[/yellow]"
-        else:
-            bucket = "[dim]DISCARD[/dim]"
+    def _add(leads, bucket_label):
+        for sl in leads:
+            scored.append({
+                "agency":    sl.signal.agency_name,
+                "source":    sl.signal.source,
+                "type":      sl.classification.signal_type,
+                "vertical":  sl.classification.vertical,
+                "score":     sl.score_result.total,
+                "bucket":    bucket_label,
+                "team_size": sl.enrichment.team_size,
+                "tools":     ", ".join(sl.enrichment.tool_stack) or "—",
+                "size_src":  sl.enrichment.team_size_source,
+                "url":       sl.signal.url,
+                "snippet":   (sl.signal.raw_text or "")[:120],
+                "breakdown": {
+                    "vertical":  sl.score_result.vertical_score,
+                    "size":      sl.score_result.size_score,
+                    "tool":      sl.score_result.tool_score,
+                    "recency":   sl.score_result.recency_score,
+                    "strength":  sl.score_result.strength_score,
+                },
+            })
 
-        scored.append({
-            "agency":   signal.agency_name,
-            "source":   signal.source,
-            "type":     signal.signal_type,
-            "vertical": signal.vertical_hint or "—",
-            "score":    result.total,
-            "bucket":   bucket,
-            "url":      signal.url,
-            "snippet":  (signal.raw_text or "")[:120],
-        })
+    _add(output.proceed,   "[bold green]PROCEED[/bold green]")
+    _add(output.watchlist, "[yellow]WATCHLIST[/yellow]")
+    _add(output.discarded, "[dim]DISCARD[/dim]")
 
     return sorted(scored, key=lambda x: x["score"], reverse=True)
 
