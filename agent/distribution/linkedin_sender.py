@@ -22,7 +22,7 @@ from db.models import OutreachEvent, Lead, LeadStatus
 log = structlog.get_logger()
 
 _PB_BASE = "https://api.phantombuster.com/api/v2"
-_AGENT_CONNECT = "LinkedIn Network Booster"
+_AGENT_CONNECT = "Connect and send follow-up messages"
 _AGENT_MESSAGE = "LinkedIn Message Sender"
 
 
