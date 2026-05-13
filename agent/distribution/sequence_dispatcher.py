@@ -27,6 +27,7 @@ from agent.distribution.linkedin_sender import (
     send_dm,
     is_connected,
 )
+from agent.response_handler.handler import handle_sequence_exhausted
 
 log = structlog.get_logger()
 
@@ -109,7 +110,7 @@ def run_sequence_dispatcher() -> dict:
                     log.info("li_dm_skipped_not_connected", lead_id=lead.id)
                     counts["skipped"] += 1
 
-            # Step: final email (Day 30)
+            # Step: final email (Day 30) → then mark exhausted + start cooldown
             elif _step_due("email_final", days_elapsed, lead.id, session):
                 ok = send_final_email(
                     lead_id=lead.id,
@@ -119,6 +120,7 @@ def run_sequence_dispatcher() -> dict:
                 )
                 if ok:
                     counts["email_final"] += 1
+                    handle_sequence_exhausted(lead.id)
 
         session.commit()
 
