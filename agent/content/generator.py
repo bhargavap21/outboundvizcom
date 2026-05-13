@@ -6,7 +6,7 @@ import anthropic
 import structlog
 
 from config.settings import ANTHROPIC_API_KEY, MODEL_CONTENT
-from agent.research.researcher import AgencyBrief
+from agent.research.brief import AgencyBrief
 
 log = structlog.get_logger()
 _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -134,8 +134,9 @@ def _parse_dm_response(text: str) -> tuple[str, str, str]:
     msgs: dict[str, list[str]] = {"MSG1": [], "MSG2": [], "MSG3": []}
     current = None
     for line in text.strip().splitlines():
-        if line.strip() in msgs:
-            current = line.strip()
+        key = line.strip().rstrip(":")
+        if key in msgs:
+            current = key
         elif current:
             msgs[current].append(line)
     return (

@@ -52,8 +52,6 @@ def pipeline_daily() -> None:
                 content = generate_content(brief)
                 lead.status = LeadStatus.content_ready
                 log.info("content_generated", agency=lead.agency_name)
-            except NotImplementedError:
-                log.warning("research_or_content_not_implemented", agency=lead.agency_name)
             except Exception as e:
                 log.error("pipeline_error", agency=lead.agency_name, error=str(e))
         session.commit()
