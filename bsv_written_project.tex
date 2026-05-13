@@ -1,0 +1,641 @@
+\documentclass[11pt, letterpaper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[margin=1.1in, top=1in, bottom=1in]{geometry}
+\usepackage{fontspec}                  % requires XeLaTeX or LuaLaTeX
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{mdframed}
+\usepackage{soul}
+\usepackage{footnote}
+\usepackage{multirow}
+
+% ── Fonts ─────────────────────────────────────────────────────────────────────
+\setmainfont{Inter}[
+  BoldFont    = Inter Bold,
+  ItalicFont  = Inter Italic,
+]
+% Fallback if Inter not installed: comment above and uncomment below
+% \usepackage{helvet}
+% \renewcommand{\familydefault}{\sfdefault}
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{navy}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{2d6bff}
+\definecolor{lightgray}{HTML}{f5f5f7}
+\definecolor{midgray}{HTML}{8e8e93}
+\definecolor{rulegray}{HTML}{d1d1d6}
+
+% ── Hyperref ──────────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks  = true,
+  linkcolor   = accent,
+  urlcolor    = accent,
+  citecolor   = accent,
+  pdftitle    = {BSV AI Fellow -- Written Project},
+  pdfauthor   = {Your Name},
+}
+
+% ── Section Styling ───────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{navy}}
+  {}
+  {0em}
+  {}
+  [\vspace{-0.3em}\textcolor{rulegray}{\rule{\linewidth}{0.4pt}}\vspace{0.3em}]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{navy}}
+  {}
+  {0em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{midgray}}
+  {}
+  {0em}
+  {}
+
+\titlespacing{\section}{0pt}{1.6em}{0.5em}
+\titlespacing{\subsection}{0pt}{1.2em}{0.3em}
+\titlespacing{\subsubsection}{0pt}{0.8em}{0.2em}
+
+% ── Page Header / Footer ──────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small\textcolor{midgray}{BSV AI Fellow -- Written Project}}
+\fancyhead[R]{\small\textcolor{midgray}{Confidential}}
+\fancyfoot[C]{\small\textcolor{midgray}{\thepage}}
+
+% ── List Styling ──────────────────────────────────────────────────────────────
+\setlist[itemize]{leftmargin=1.4em, itemsep=0.2em, topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.4em, itemsep=0.2em, topsep=0.3em}
+
+% ── Callout Box ───────────────────────────────────────────────────────────────
+\newmdenv[
+  backgroundcolor  = lightgray,
+  linecolor        = rulegray,
+  linewidth        = 0.5pt,
+  roundcorner      = 4pt,
+  innerleftmargin  = 14pt,
+  innerrightmargin = 14pt,
+  innertopmargin   = 10pt,
+  innerbottommargin= 10pt,
+  skipabove        = 0.8em,
+  skipbelow        = 0.8em,
+]{callout}
+
+% ── Caption Styling ───────────────────────────────────────────────────────────
+\captionsetup{
+  font      = {small, color=midgray},
+  labelfont = bf,
+  skip      = 4pt,
+}
+
+% ── Line Spacing ──────────────────────────────────────────────────────────────
+\setstretch{1.25}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── Title Block ───────────────────────────────────────────────────────────────
+\begin{center}
+  {\fontsize{22}{26}\selectfont\bfseries\color{navy} BSV AI Fellow}\\[0.4em]
+  {\fontsize{13}{16}\selectfont\color{midgray} Written Project Submission}\\[1.2em]
+  {\normalsize\textbf{Your Name}} \quad\textcolor{rulegray}{|}\quad
+  {\normalsize\textcolor{midgray}{your@email.com}} \quad\textcolor{rulegray}{|}\quad
+  {\normalsize\textcolor{midgray}{May 2026}}
+\end{center}
+
+\vspace{0.5em}
+\textcolor{rulegray}{\rule{\linewidth}{0.6pt}}
+\vspace{1.2em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PART 1 -- PRIORITIZATION FRAMEWORK
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Part 1 \quad Prioritization Framework}
+
+\subsection{Evaluation Approach}
+
+For each company I started by understanding what the business actually does and
+what pain its customers are experiencing. I watched product demos, reviewed
+documentation, and where possible tested the product directly. From there I
+mapped the competitive landscape to assess whether the insight was differentiated
+or replicable. Finally I looked at the financials, funding history, and founder
+background to stress-test whether the team was credible and the business had
+real traction behind it. I weighted technical moat and founder-market fit most
+heavily, treating traction signals and capital efficiency as confirming or
+disconfirming evidence rather than leading indicators.
+
+\subsubsection{Scoring Criteria}
+
+I evaluated each company across four dimensions:
+
+\begin{enumerate}
+  \item \textbf{Technical Moat} -- Does the company have a defensible insight,
+    proprietary algorithm, or infrastructure advantage that is hard to replicate?
+    Preference for companies where the core IP is the product, instead of a wrapper.
+
+  \item \textbf{Founder-Market Fit} -- Does the founding team have direct, earned
+    experience with the problem? Operator founders who have experienced the pain
+    points are weighted above general builders.
+
+  \item \textbf{TAM \& Timing} -- Is the market large enough to support a
+    venture-scale outcome, and is the problem becoming urgent now due to a
+    structural shift such as the rise of agentic AI workflows?
+
+  \item \textbf{Traction Signal} -- Is there evidence of real pull from developer
+    adoption, revenue growth, or enterprise contracts? Organic traction is
+    weighted above funded distribution.
+\end{enumerate}
+
+\subsection{Company Rankings}
+
+\begin{longtable}{@{} p{0.04\linewidth} p{0.10\linewidth} p{0.07\linewidth}
+                      p{0.28\linewidth} p{0.42\linewidth} @{}}
+  \toprule
+  \textbf{\#} &
+  \textbf{Company} &
+  \textbf{Stage} &
+  \textbf{Description} &
+  \textbf{Reasoning} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{5}{l}{\small\textit{continued from previous page}} \\
+  \toprule
+  \textbf{\#} & \textbf{Company} & \textbf{Stage} &
+  \textbf{Description} & \textbf{Reasoning} \\
+  \midrule
+  \endhead
+
+  \bottomrule
+  \endfoot
+
+  1 & Parasail & Series A &
+  AI inference cloud that aggregates GPU supply across 40+ global data centers
+  with pay-per-token pricing and no contracts. &
+  Up to 30x cheaper than legacy cloud with 500B tokens processed per day and
+  30\% MoM revenue growth less than a year post-launch. Faces competition from
+  Fireworks and Baseten. CEO Mike Henry built Groq Cloud. Co-founder Tim Harris
+  raised \$250M at Swift Navigation. \\[0.5em]
+
+  2 & Tigris Data & Series A &
+  Globally distributed object storage built for AI workloads that eliminates
+  cloud egress fees by moving data to where GPUs are. &
+  Egress fees accounted for the majority of fal.ai cloud spend before switching
+  to Tigris. Zero-copy Forks and data gravity create stickiness in a
+  fast-growing TAM with 8x YoY growth. Founded by Ovais Tariq, who built and
+  scaled Uber's global storage platform. \\[0.5em]
+
+  3 & Entire & Seed &
+  Developer platform that captures agent session context and ties it into Git,
+  creating a persistent reasoning layer across agentic coding workflows. &
+  Tools like Claude Code are making multi-agent workflows the default, yet agent
+  sessions remain temporary with no shared context. High displacement risk from
+  GitHub if they move into this space. \$60M seed backed by Garry Tan, Olivier
+  Pomel (Datadog CEO), and more, signaling strong operator conviction. \\[0.5em]
+
+  4 & BAML & Seed &
+  Domain-specific language for building type-safe LLM applications that handles
+  structured output parsing, retries, and testing across any model or language. &
+  Addresses enterprise LLM reliability via cost-advantaged Schema-Aligned
+  Parsing. Outperforms GPT-4o native outputs using GPT-3.5. High schema
+  stickiness and cross-modal portability provide a strong moat against native
+  rivals like Anthropic Tool Use. \\[0.5em]
+
+  5 & Mem0 & Seed &
+  Persistent memory layer that gives AI agents and applications long-term recall
+  across sessions, users, and agents. &
+  Making persistent memory a prerequisite for any long-running agent product.
+  Large and growing TAM as agent adoption accelerates. Faces the risk of being
+  commoditized by model providers and competition from well-funded players
+  like Zep. \\[0.5em]
+
+  6 & Rasa & Series C &
+  Open-source enterprise conversational AI platform that combines LLM fluency
+  with controllable business logic, deployed by Fortune 500 companies at scale. &
+  Proven enterprise traction with 50M+ downloads and PayPal deploying
+  internally, but open source to enterprise conversion at scale remains
+  questionable. CALM architecture is a real moat, however Sierra, Cognigy, and
+  native agent frameworks are closing the gap fast at a late stage with limited
+  new diligence signal to uncover. \\[0.5em]
+
+  7 & Atuin & Pre-Seed &
+  Replaces shell history with an encrypted database synced across machines,
+  expanding into executable runbooks via Atuin Desktop. &
+  Data gravity and a loyal open source community trusted by thousands of
+  developers worldwide. The pivot to executable runbooks is the more interesting
+  enterprise bet. Monetization path is unclear and not an obvious venture-scale
+  outcome without the runbook vision materializing. \\[0.5em]
+
+  8 & Primitive & Seed &
+  Email infrastructure for developers and AI agents, offering managed webhooks
+  and self-hosted options with SDKs for Node.js, Python, and Go. &
+  Abstracts complex email infrastructure into a developer-friendly API with a
+  time-to-market advantage in the AI agent space. High infrastructure costs at
+  scale with unproven IP reputation against Resend and SendGrid make enterprise
+  adoption difficult. \\
+
+\end{longtable}
+
+\subsection{Supporting Data}
+
+\subsubsection{Funding Overview}
+
+{\small\textcolor{midgray}{Source: PitchBook, TechCrunch, Tracxn, company press releases.}}
+
+\vspace{0.4em}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} l r l X @{}}
+  \toprule
+  \textbf{Company} & \textbf{Total Raised} & \textbf{Last Round} & \textbf{Key Signal} \\
+  \midrule
+  Entire      & \$60.0M               & Seed, Feb 2026     & Largest developer tools seed ever, \$300M valuation \\
+  Rasa        & \$83.8M               & Series C, Feb 2024 & \$16.9M ARR in 2023, 50M+ downloads across 9 rounds \\
+  Parasail    & \$42.0M               & Series A, Apr 2026 & 500B tokens/day, 30\% MoM revenue growth \\
+  Tigris Data & \$39.2M               & Series A, Oct 2025 & 8x YoY growth, 4,000+ customers \\
+  Mem0        & \$24.5M               & Series A, Oct 2025 & 41K GitHub stars, 186M API calls in Q3 2025 \\
+  BAML        & \textasciitilde\$130K & Seed, undisclosed  & Most capital-efficient company on this list \\
+  Atuin       & Undisclosed           & Pre-Seed           & No disclosed amount \\
+  Primitive   & Undisclosed           & Seed, Apr 2026     & Launched Apr 2026, no disclosed amount \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{callout}
+  \textbf{Insight.} BAML has raised approximately \$130K yet commands the
+  strongest organic developer community on this list. Funding size does not
+  correlate with diligence priority. It is one signal among four.
+\end{callout}
+
+\subsubsection{LinkedIn Headcount}
+
+{\small\textcolor{midgray}{Source: LinkedIn Premium, May 2026.}}
+
+\vspace{0.4em}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} l r r r r r X @{}}
+  \toprule
+  \textbf{Company} &
+  \textbf{Employees} &
+  \textbf{6m} &
+  \textbf{1y} &
+  \textbf{2y} &
+  \textbf{Tenure} &
+  \textbf{Signal} \\
+  \midrule
+  Entire    & 28  & +211\% & ---   & ---    & 0.3yr &
+    211\% surge in 6m post \$60M seed. Capital being deployed fast. \\[0.3em]
+  Mem0      & 21  & +62\%  & +110\% & +600\% & 0.4yr &
+    600\% over 2y is the most aggressive hiring trajectory on this list \\[0.3em]
+  Parasail  & 31  & +35\%  & +82\%  & +158\% & 0.9yr &
+    Consistent acceleration across all time horizons confirms real revenue pull \\[0.3em]
+  BAML      & 11  & +57\%  & +22\%  & +120\% & 0.3yr &
+    11 people with outsized community traction. Capital efficiency thesis confirmed. \\[0.3em]
+  Rasa      & 194 & +22\%  & +34\%  & +59\%  & 1.4yr &
+    Largest and most stable team. Slowest growth rate consistent with Series C maturity. \\[0.3em]
+  Tigris    & 23  & +10\%  & +10\%  & +77\%  & 1.8yr &
+    Flat near-term growth despite fresh Series A. Warrants a diligence question. \\[0.3em]
+  Primitive & 3   & +200\% & ---    & ---    & 0.2yr &
+    200\% in 4m but from a base of 1. Too early to read meaningfully. \\[0.3em]
+  Atuin     & 2   & 0\%    & 0\%    & +100\% & 1.6yr &
+    Zero hiring in 12 months. Solo founder mode limits the enterprise runbook thesis. \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{callout}
+  \textbf{Insight.} Tigris shows only +10\% headcount growth over 12 months
+  despite claiming 8x YoY revenue growth and closing a fresh Series A. The
+  disconnect warrants a direct diligence question. Either growth is concentrated
+  in a small number of large contracts, or the revenue figure is being measured
+  differently than it appears.
+\end{callout}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PART 2 -- TRACK 2: AGENTIC GTM -- VIZCOM
+% ─────────────────────────────────────────────────────────────────────────────
+\newpage
+\section{Part 2 \quad Agentic GTM -- Vizcom}
+
+\subsection{Understanding the Company}
+
+\subsubsection{What Vizcom Does}
+
+Vizcom turns rough sketches into photorealistic 3D renders in seconds, built
+for physical product designers rather than digital ones. A designer draws in
+Procreate or on paper, uploads it, and gets a material-accurate product
+visualization in real time with no rendering artist, no outsourcing, and no
+KeyShot export queue. The CEO is an ex-Honda, ex-Nvidia industrial designer.
+The product writes like someone who has actually used KeyShot and found it
+exhausting.
+
+\subsubsection{The Growth Problem}
+
+Design agencies win or lose pitches based on how many concept directions they
+can show. Traditional rendering creates a hard ceiling. Teams sketch 50 ideas,
+render 4, and the client picks from 4. Vizcom removes that ceiling. The growth
+problem is awareness. Most boutique agencies have never heard of it, and the
+buyer who controls budget is not the same person who
+would stumble across it organically.
+
+\subsection{GTM Agent Design}
+
+\subsubsection{What the Agent Does}
+
+The agent monitors the web for signals that a boutique industrial design agency
+is actively pitching new business. When it detects a qualifying signal, it
+researches the agency, scores the lead against a weighted rubric, and generates
+personalized outreach across a coordinated channel sequence. It tracks
+responses and retrains its scoring weights weekly based on reply rates.
+
+\subsubsection{Inputs and Outputs}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} l X @{}}
+  \toprule
+  & \textbf{Description} \\
+  \midrule
+  \textbf{Inputs} &
+  LinkedIn job postings, Behance and ArtStation portfolio projects,
+  Core77 and Dezeen trade press, a seed list of 500+ boutique ID consultancies,
+  and LinkedIn employee profiles for tool stack signals (KeyShot, Rhino, Alias). \\[0.5em]
+  \textbf{Outputs} &
+  Lead scorecard (JSON), cold email with two subject line variants, Behance
+  portfolio comment (pre-email, no pitch), LinkedIn connection
+  note and DM sequence, physical mailer for 80+ score leads
+  via Lob API, CRM log entry, weekly performance digest. \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Lead Scoring}
+
+Leads are scored 0 to 100. Scores above 65 proceed to outreach. Scores 40
+to 64 enter a watch list.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} l r X @{}}
+  \toprule
+  \textbf{Dimension} & \textbf{Weight} & \textbf{Logic} \\
+  \midrule
+  Vertical fit    & 25 pts & Footwear, electronics, furniture = 25. Automotive = 15. Medical = 5. \\
+  Company size    & 20 pts & 10 to 25 employees = 20. Outside range = 0. \\
+  Tool signal     & 20 pts & KeyShot or Rhino in employee profiles = 20. No signal = 5. \\
+  Signal recency  & 20 pts & Under 7 days = 20. 7 to 14 days = 12. Over 14 days = 5. \\
+  Signal strength & 15 pts & New client win = 15. Case study = 12. Job post = 8. Portfolio update = 5. \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Channel Sequence}
+
+Channels run in a coordinated sequence, not in parallel. Each touch warms the next.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} l l X @{}}
+  \toprule
+  \textbf{Day} & \textbf{Channel} & \textbf{Action} \\
+  \midrule
+  0       & Detection          & Agency posts case study, new project, or junior designer listing \\
+  1       & Behance/ArtStation & Opinionated comment on their new project. No pitch, no link. \\
+  3       & Cold email         & Sent to Design Director. References specific project. Closes with a question. \\
+  7       & LinkedIn           & Connection request with short note referencing the same project \\
+  14      & LinkedIn DM        & Follow-up sharing something useful in their vertical. No hard ask. \\
+  25--28  & Physical mailer    & 80+ score leads only. Printed before/after render via Lob API. \\
+  30      & Final email        & Short. Acknowledges they may not be the right fit. Leaves the door open. \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Technical Stack}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} l X @{}}
+  \toprule
+  \textbf{Component} & \textbf{Tool} \\
+  \midrule
+  Orchestration       & Python with APScheduler (daily detection, weekly learning loop) \\
+  LinkedIn signals    & LinkedIn Jobs API and Apify scraper \\
+  Portfolio signals   & Apify actor for Behance. ArtStation disabled (no reliable actor). \\
+  Trade press         & RSS feeds for Core77, Dezeen, and Google News \\
+  LLM classification  & \texttt{claude-haiku-4-5} (approx. 200 calls/day) \\
+  LLM scoring/brief   & \texttt{claude-haiku-4-5} (approx. 30 calls/day) \\
+  LLM email/DM copy   & \texttt{claude-sonnet-4-20250514} (approx. 30 calls/day) \\
+  Database            & SQLite (dev) to PostgreSQL (prod) \\
+  Email sending       & SendGrid on a warmed subdomain \\
+  LinkedIn outreach   & Phantombuster within ToS rate limits \\
+  Physical mail       & Lob API (not yet implemented) \\
+  CRM                 & HubSpot API or CSV export (not yet implemented) \\
+  Source code         & \href{https://github.com/bhargavap21/outboundvizcom}{github.com/bhargavap21/outboundvizcom} \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Example Output}
+
+\subsubsection{Cold Email -- Whipsaw (Consumer Electronics)}
+
+\begin{callout}
+  \textbf{Subject A:} How many renders were in your last pitch deck?\\
+  \textbf{Subject B:} You sketched 30. You showed 4.\\[0.8em]
+  Dan,\\[0.5em]
+  The temple-to-cup junction on your headphone project is the kind of decision
+  that only gets made by someone who has actually held a bad pair. It is
+  considered in a way most concept work is not.\\[0.5em]
+  Quick question: how many render variations did you show the client before
+  landing on that direction?\\[0.5em]
+  Every studio I talk to has the same problem. You sketch 30 directions, you
+  render 4, and the client picks from 4. The constraint is never ideas.\\[0.5em]
+  New Balance's footwear team cut their colorway review cycle in half.
+  Breville uses it before committing to a single physical sample.\\[0.5em]
+  Curious whether your render cycle is actually the bottleneck, or whether
+  it sits somewhere else in your process.\\[0.5em]
+  [Name]
+\end{callout}
+
+\subsection{Success Metrics}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\linewidth}{@{} X r r @{}}
+  \toprule
+  \textbf{Metric} & \textbf{Month 1} & \textbf{Month 3} \\
+  \midrule
+  Qualified leads per week          & 15--20   & 40--60 \\
+  Email open rate                   & >35\%    & >45\% \\
+  Email reply rate                  & >5\%     & >8\% \\
+  LinkedIn connection acceptance    & >30\%    & >40\% \\
+  Demos booked per month            & 3--5     & 10--15 \\
+  Cost per qualified lead           & <\$2.00  & <\$1.00 \\
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Evaluation}
+
+\subsubsection{What Was Built and What Worked}
+
+The core signal-to-content pipeline is fully operational end-to-end. Signal
+detection pulls live data from three sources. LinkedIn posts via Apify, Google
+News RSS (Core77, Dezeen, Designboom), and Behance portfolio updates via the
+\texttt{easyapi/behance-people-scraper} Apify actor. In a test run against the
+seed agency list, the pipeline surfaced real signals for Morrama, Priority
+Designs, Whipsaw, Bould Design, and Layer within a single daily pass, all
+verified against live URLs.
+
+The scoring rubric runs as designed. Every signal is classified by Claude Haiku
+(vertical, signal type, size hint), enriched with team size from the seed
+database, and scored against the five-dimension rubric. Morrama and Priority
+Designs both scored 82 on case studies in relevant verticals. Whipsaw scored 65
+on a client win in consumer electronics. Haiku classification correctly
+identified verticals and signal types across every tested agency with no
+manual review needed.
+
+Content generation produces all five outreach pieces per lead. Behance comment,
+cold email with two subject line variants, LinkedIn connection note, Day-14 DM,
+and Day-30 final email. The voice constraints are enforced at the prompt level.
+The banned word list covers ``AI,'' ``seamless,'' ``game-changing,'' and
+eleven other terms. Every email in test output opened with a specific
+observation about the agency's work and closed with a question rather than a
+meeting request.
+
+The distribution layer is wired together. The sequence dispatcher advances
+leads through timed steps (Day 3, 7, 14, 30) using a database-backed idempotency
+check so no step fires twice. The email sender enforces a 40-per-day hard cap
+and an 8am--11am send window. The LinkedIn sender enforces the 20-per-day
+connection limit. The inbound response handler uses Claude Haiku to classify
+replies into five categories (positive, objection, unsubscribe, bounce,
+no\_response), drafts objection replies for human review, suppresses
+unsubscribes immediately, and posts warm lead alerts to Slack.
+
+APScheduler orchestrates the full loop. A daily job fires signal detection,
+scoring, research, content generation, and sequence dispatch. A Sunday job fires
+the weekly learning loop, which computes open and reply rates by variant and
+produces a markdown digest via Claude Sonnet.
+
+\subsubsection{What Broke or Fell Short}
+
+\textbf{Tool stack detection is effectively broken.} The scoring rubric assigns
+20 points for a KeyShot or Rhino signal, but the enricher only scans the text
+of incoming signal posts for tool keywords. Agency news posts and case studies
+do not mention their renderer. Every lead in the real test run showed no tool
+stack detected, meaning the tool dimension contributed 5 points (the minimum)
+across 100\% of scored leads. The intended mechanism, scanning LinkedIn
+employee profiles for tool keywords, was deferred to the full research step,
+which only runs after a lead already passes the threshold. The dimension is
+load-bearing in the scoring model but currently has no data to feed it.
+
+\textbf{ArtStation is disabled.} No reliable Apify actor exists for ArtStation
+as of May 2026. The \texttt{fetch\_artstation\_projects} function returns an
+empty list immediately. Behance works, but the planned two-platform portfolio
+signal layer is currently one platform.
+
+\textbf{Behance comments are not automated.} The content generator produces the
+comment copy for each lead, but there is no mechanism to post it. The sequence
+dispatcher marks Day-1 Behance comments as ``manual or future automation.'' The
+content exists in the database. The posting step does not.
+
+\textbf{Physical mailers are not built.} The spec calls for Lob API dispatches
+for 80+ score leads on Day 25--28. The sequence dispatcher's step schedule
+contains no Lob step and there is no Lob client anywhere in the codebase. This
+is the largest unbuilt component.
+
+\textbf{The inbound response handler has no entry point.} The handler correctly
+classifies and routes replies, but there is no HTTP webhook endpoint for
+SendGrid to call when a reply arrives. In production it needs a lightweight
+FastAPI server wired to SendGrid's Inbound Parse webhook.
+
+\textbf{The learning loop does not retrain weights.} The weekly analyzer
+computes open and reply rates by variant and generates a human-readable markdown
+digest, but it does not update the scorer's dimension weights. The weights are
+hardcoded in \texttt{scorer.py}. The spec's claim that the agent ``retrains its
+scoring weights weekly'' is not implemented.
+
+\textbf{LinkedIn acceptance is inferred, not verified.} The
+\texttt{is\_connected()} check confirms only that a connection request was
+\emph{dispatched}, not that it was accepted. Day-14 DMs gate on this check, so
+the agent cannot confirm actual connection status before sending.
+
+\textbf{The live pipeline runs against an empty seed list.} The \texttt{SEED\_AGENCIES}
+list in \texttt{main.py} is hardcoded as empty with a \texttt{TODO} comment to
+load from the database. The daily job would detect zero signals on a live run.
+The seed list exists in the \texttt{AgencyList} table but the main loop does
+not load from it.
+
+\subsubsection{What I Would Do With More Time}
+
+\begin{itemize}
+  \item \textbf{Fix the seed list load.} One line. Replace the empty
+    \texttt{SEED\_AGENCIES} list in \texttt{main.py} with a DB query against
+    \texttt{AgencyList}. This is the highest-leverage unblocked fix.
+
+  \item \textbf{Move tool stack detection to pre-scoring.} The enricher should
+    scrape LinkedIn employee profiles for each agency before scoring, not after.
+    The tool signal dimension is the most predictive in the rubric and currently
+    contributes nothing. Running the Apify LinkedIn Profiles Scraper on the top
+    3 employees per agency would restore the signal before the threshold
+    decision is made.
+
+  \item \textbf{Build the Lob integration.} The physical mailer is the most
+    differentiated component in the channel sequence and the only piece with no
+    equivalent in a standard outbound stack. The 80+ score filter keeps volume
+    low enough (2--5 per week) that unit economics are manageable from day one.
+
+  \item \textbf{Expose the response handler as a webhook.} A single FastAPI
+    endpoint wired to SendGrid's Inbound Parse makes the response loop live.
+    Without it, the objection drafts and Slack alerts the handler generates are
+    never triggered.
+
+  \item \textbf{Implement actual weight regression in the learning loop.} The
+    analyzer already collects the right data (reply rates by scoring dimension).
+    The missing piece is a regression step that updates the weights in
+    \texttt{scorer.py} based on six weeks of outcome data. Company size is the
+    weakest prior and needs the most empirical validation.
+
+  \item \textbf{Add a vision model pass on Behance renders.} Agencies whose
+    public renders look rough are higher-priority targets than agencies whose
+    renders already look polished. A multimodal pass on Behance project images
+    for each 65+ score lead would add a sixth scoring dimension unavailable to
+    any competitor using the same text-only pipeline.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  FOOTER NOTE
+% ─────────────────────────────────────────────────────────────────────────────
+\vfill
+\textcolor{rulegray}{\rule{\linewidth}{0.4pt}}
+\begin{center}
+  \small\textcolor{midgray}{
+    LLM conversations are attached separately as supplementary material.
+    All funding data sourced from PitchBook, TechCrunch, Tracxn, and company
+    press releases as of May 2026.
+  }
+\end{center}
+
+\end{document}
